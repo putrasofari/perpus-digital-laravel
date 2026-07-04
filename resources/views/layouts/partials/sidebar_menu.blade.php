@@ -28,6 +28,22 @@
             </a>
         </li>
 
+        <li>
+            <a href={{ route('admin.categories.index') }}
+                class="block px-4 py-2 rounded-lg transition
+            {{ request()->routeIs('admin.categories.*') ? $activeClass : $normalClass }}">
+                Data Kategori
+            </a>
+        </li>
+
+        <li>
+            <a href={{ route('admin.kelas.index') }}
+                class="block px-4 py-2 rounded-lg transition
+            {{ request()->routeIs('admin.kelas.*') ? $activeClass : $normalClass }}">
+                Data Kelas
+            </a>
+        </li>
+
         {{-- LAPORAN --}}
         <li class="mt-6 px-4 text-xs font-semibold uppercase tracking-wider text-gray-400">
             Laporan

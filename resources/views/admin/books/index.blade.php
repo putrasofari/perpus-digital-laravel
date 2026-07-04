@@ -79,9 +79,6 @@
                         <th class="px-4 py-3">Judul</th>
                         <th class="px-4 py-3">Kategori</th>
                         <th class="px-4 py-3">Penulis</th>
-                        <th class="px-4 py-3">Penerbit</th>
-                        <th class="px-4 py-3">Tahun</th>
-                        <th class="px-4 py-3 text-center">Hal.</th>
                         <th class="px-4 py-3 text-center">Stok</th>
                         <th class="px-4 py-3 text-center">Aksi</th>
 
@@ -130,24 +127,6 @@
 
                             </td>
 
-                            <td class="px-4 py-3">
-
-                                {{ $book->penerbit }}
-
-                            </td>
-
-                            <td class="px-4 py-3">
-
-                                {{ $book->tahun_terbit }}
-
-                            </td>
-
-                            <td class="px-4 py-3 text-center">
-
-                                {{ $book->jmlh_halaman }}
-
-                            </td>
-
                             <td class="px-4 py-3 text-center">
 
                                 <span
@@ -163,6 +142,13 @@
                             <td class="px-4 py-3">
 
                                 <div class="flex justify-center gap-2">
+
+                                    <a href="{{ route('admin.books.show', $category) }}"
+                                        class="px-3 py-1 rounded bg-sky-500 hover:bg-sky-600 text-white">
+
+                                        Detail
+
+                                    </a>
 
                                     <a href="{{ route('admin.books.edit', $book->id) }}"
                                         class="px-3 py-1 bg-yellow-400 hover:bg-yellow-500 rounded text-white">
