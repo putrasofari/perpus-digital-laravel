@@ -15,13 +15,14 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('book_id')->constrained()->cascadeOnDelete();
-            $table->date('requested_at');
-            $table->date('approved_at');
-            $table->date('borrow_date');
-            $table->date('due_date');
-            $table->date('returned_at');
-            $table->enum('status', ['menunggu', 'diterima', 'ditolak', 'dipinjam', 'dikembalikan']);
-            $table->string('rejected_reason')->nullable();
+            $table->unsignedInteger('quantity')->default(1);
+            $table->timestamp('requested_at');
+            $table->timestamp('approved_at')->nullable();
+            $table->date('borrow_date')->nullable();
+            $table->date('due_date')->nullable();
+            $table->timestamp('returned_at')->nullable();
+            $table->enum('status', ['menunggu', 'diterima', 'ditolak', 'dipinjam', 'dikembalikan'])->default('menunggu');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

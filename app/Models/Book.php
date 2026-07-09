@@ -18,7 +18,25 @@ class Book extends Model
         'image',
     ];
 
-    public function category() {
+    public function category()
+    {
         return $this->belongsTo(Category::class);
+    }
+
+    public function borrowings()
+    {
+        return $this->hasMany(Borrowing::class);
+    }
+
+    public function getBorrowedCountAttribute()
+    {
+        return $this->borrowings()
+            ->where('status', 'dipinjam')
+            ->count();
+    }
+
+    public function getAvailableStockAttribute()
+    {
+        return $this->stok - $this->borrowed_count;
     }
 }

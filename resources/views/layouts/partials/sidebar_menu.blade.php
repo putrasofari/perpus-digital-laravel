@@ -49,6 +49,14 @@
             Laporan
         </li>
 
+        <li>
+            <a href={{ route('admin.borrowings.index') }}
+                class="block px-4 py-2 rounded-lg transition
+            {{ request()->routeIs('admin.borrowings.*') ? $activeClass : $normalClass }}">
+                Laporan Peminjaman
+            </a>
+        </li>
+
         {{-- SISTEM --}}
         <li class="mt-6 px-4 text-xs font-semibold uppercase tracking-wider text-gray-400">
             Sistem
@@ -63,17 +71,26 @@
         </li>
     @endif
 
-    {{-- ================= SISWA & GURU ================= --}}
-    @if (in_array(auth()->user()->role, ['guru', 'siswa']))
+    {{-- ================= USER ================= --}}
+    @if (in_array(auth()->user()->role, ['user']))
+        {{-- DASHBOARD --}}
+        <li>
+            <a href={{ route('user.dashboard') }}
+                class="block px-4 py-2 rounded-lg transition
+            {{ request()->routeIs('user.dashboard') ? $activeClass : $normalClass }}">
+                Dashboard
+            </a>
+        </li>
+
         <li class="mt-6 px-4 text-xs font-semibold uppercase tracking-wider text-gray-400">
-            Inventaris
+            Katalog
         </li>
 
         <li>
-            <a href="#"
+            <a href={{ route('user.catalogs.index')}}
                 class="block px-4 py-2 rounded-lg transition
-                {{ request()->routeIs('item_unit.user_index') ? $activeClass : $normalClass }}">
-                Data Barang
+                {{ request()->routeIs('user.catalogs.*') ? $activeClass : $normalClass }}">
+                Koleksi Katalog Buku
             </a>
         </li>
 
@@ -82,7 +99,7 @@
         </li>
 
         <li>
-            <a href="#"
+            <a href={{route('user.borrowings.index')}}
                 class="block px-4 py-2 rounded-lg transition
                 {{ request()->routeIs('borrowings.user') ? $activeClass : $normalClass }}">
                 Riwayat Peminjaman

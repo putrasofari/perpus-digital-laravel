@@ -15,6 +15,130 @@
             @yield('page-title')
         </h1>
 
+        {{-- Notification --}}
+        <div class="relative" x-data="{ notifOpen: false }">
+
+            <button @click="notifOpen = !notifOpen"
+                class="relative w-10 h-10 rounded-full flex items-center justify-center
+               hover:bg-slate-100 transition">
+
+                {{-- Bell --}}
+                <svg class="w-6 h-6 text-slate-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032
+                2.032 0 0118 14.158V11a6.002
+                6.002 0 001-11.917V4a2
+                2 0 11-4 0v-.917A6.002
+                6.002 0 006 11v3.159c0
+                .538-.214 1.055-.595
+                1.436L4 17h5m6 0v1a3
+                3 0 11-6 0v-1m6 0H9" />
+
+                </svg>
+
+                {{-- Badge --}}
+                @if (auth()->user()->unreadNotifications->count())
+                    <span
+                        class="absolute -top-1 -right-1
+                       min-w-5 h-5 px-1
+                       bg-red-500 text-white
+                       rounded-full text-[10px]
+                       flex items-center justify-center font-semibold">
+
+                        {{ auth()->user()->unreadNotifications->count() }}
+
+                    </span>
+                @endif
+            </button>
+
+            <div x-show="notifOpen" @click.outside="notifOpen = false" x-transition
+                class="absolute right-0 mt-2
+                w-96 bg-white rounded-xl
+                border border-slate-200
+                shadow-xl overflow-hidden
+                z-50">
+
+                <div class="px-5 py-4 border-b">
+
+                    <h3 class="font-semibold text-slate-800">
+
+                        Notifikasi
+
+                    </h3>
+
+                </div>
+
+                <div class="max-h-96 overflow-y-auto">
+                    @forelse(auth()->user()->notifications->take(3) as $notification)
+                        <a href="{{ route('notifications.show', $notification) }}"
+                            class="block px-5 py-4
+                          hover:bg-slate-50
+                            border-b">
+
+                            <div class="flex gap-3">
+
+                                <div
+                                    class="w-10 h-10 rounded-full
+                                  bg-blue-100
+                                    flex items-center justify-center">
+
+                                    {{ $notification->data['icon'] }}
+
+                                </div>
+
+                                <div class="flex-1">
+
+                                    <p class="font-semibold text-sm">
+
+                                        {{ $notification->data['title'] }}
+
+                                    </p>
+
+                                    <p class="text-sm text-slate-600 mt-1">
+
+                                        {{ $notification->data['message'] }}
+
+                                    </p>
+
+                                    <p class="text-xs text-slate-400 mt-2">
+
+                                        {{ $notification->created_at->diffForHumans() }}
+
+                                    </p>
+
+                                </div>
+
+                                @if (is_null($notification->read_at))
+                                    <span
+                                        class="w-2 h-2
+                                        rounded-full
+                                      bg-blue-500
+                                        mt-2">
+                                    </span>
+                                @endif
+                            </div>
+                        </a>
+                    @empty
+
+                        <div class="text-center py-8 text-slate-400">
+                            Tidak ada notifikasi.
+                        </div>
+                    @endforelse
+                </div>
+                <div class="border-t">
+                    <a href="#"
+                        class="block text-center py-3
+               text-blue-600
+               hover:bg-slate-50">
+
+                        Lihat Semua
+
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
         {{-- User Dropdown --}}
         <div class="relative flex-shrink-0" x-data="{ open: false }">
 
@@ -83,7 +207,7 @@
                         </button>
                     </form>
                 </div>
-            </div>  
+            </div>
 
         </div>
 

@@ -50,7 +50,13 @@ class User extends Authenticatable
         ];
     }
 
-    public function kelas(){
+    public function kelas()
+    {
         return $this->belongsTo(Kelas::class);
+    }
+
+    public function borrowings()
+    {
+        return $this->hasMany(Borrowing::class);
     }
 }

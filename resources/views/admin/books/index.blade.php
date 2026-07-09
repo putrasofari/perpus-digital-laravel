@@ -143,7 +143,7 @@
 
                                 <div class="flex justify-center gap-2">
 
-                                    <a href="{{ route('admin.books.show', $category) }}"
+                                    <a href="{{ route('admin.books.show', $book->id) }}"
                                         class="px-3 py-1 rounded bg-sky-500 hover:bg-sky-600 text-white">
 
                                         Detail

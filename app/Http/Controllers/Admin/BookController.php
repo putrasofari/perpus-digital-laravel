@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Book;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class BookController extends Controller
 {
@@ -75,23 +76,51 @@ class BookController extends Controller
      */
     public function show(Book $book)
     {
-        //
+        $book->load('category');
+        return view('admin.books.show', compact('book'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Book $book)
     {
-        return view('admin.books.edit');
+        $categories = Category::all();
+        return view('admin.books.edit', compact('book', 'categories'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Book $book)
     {
-        //
+        $validated = $request->validate([
+            'category_id' => 'required|exists:categories,id',
+            'judul' => 'required|max:255',
+            'penulis' => 'required|max:255',
+            'penerbit' => 'required|max:255',
+            'tahun_terbit' => 'required|max:4',
+            'jmlh_halaman' => 'required|max:10',
+            'stok' => 'required|max:10',
+            'image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'description' => 'nullable',
+        ]);
+
+         if ($request->hasFile('image')) {
+
+        if ($book->image && Storage::disk('public')->exists($book->image)) {
+
+            Storage::disk('public')->delete($book->image);
+
+        }
+
+        $validated['image'] = $request->file('image')->store('books', 'public');
+
+    }
+
+    $book->update($validated);
+
+        return redirect()->route('admin.books.index');
     }
 
     /**
