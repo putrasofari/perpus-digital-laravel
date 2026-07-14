@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\BookController;
 use App\Http\Controllers\Admin\BorrowingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FeedBackController;
 use App\Http\Controllers\Admin\KelasController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
@@ -33,4 +34,8 @@ Route::middleware(['auth', 'verified', 'admin'])->prefix('admin')->name('admin.'
     Route::patch('/borrowings/{borrowing}/rejected', [BorrowingController::class, 'rejected'])->name('borrowings.rejected');
     Route::patch('/borrowings/{borrowing}/borrowed', [BorrowingController::class, 'borrowed'])->name('borrowings.borrowed');
     Route::patch('/borrowings/{borrowing}/returned', [BorrowingController::class, 'returned'])->name('borrowings.returned');
+
+    // Feedbacks
+    Route::resource('feedbacks', FeedBackController::class)->only(['index', 'show']);
+    Route::patch('/feedbacks/{feedback}/reply', [FeedBackController::class, 'reply'])->name('feedbacks.reply');
 });

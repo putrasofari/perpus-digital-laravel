@@ -86,15 +86,11 @@ class BorrowingController extends Controller
             $admins,
 
             new BorrowingNotification(
-                borrowing: $borrowing,
-
                 title: 'Permintaan Peminjaman',
-
                 message: "{$borrowing->user->name} mengajukan peminjaman buku '{$borrowing->book->judul}'.",
-
                 url: route('admin.borrowings.show', $borrowing),
-
                 icon: '📚',
+                borrowingId: $borrowing->id
             )
         );
         return redirect()->route('user.borrowings.index')->with('success', 'Peminjaman berhasil dikirim');
@@ -105,7 +101,9 @@ class BorrowingController extends Controller
      */
     public function show(Borrowing $borrowing)
     {
-
+        if ($borrowing->user_id !== auth()->id()) {
+            abort(403);
+        }
         return view('user.borrowings.show', compact('borrowing'));
     }
 

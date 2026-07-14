@@ -2,13 +2,12 @@
 
 namespace App\Notifications;
 
-use App\Models\Borrowing;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class BorrowingNotification extends Notification
+class FeedbackNotification extends Notification
 {
     use Queueable;
 
@@ -16,12 +15,14 @@ class BorrowingNotification extends Notification
      * Create a new notification instance.
      */
     public function __construct(
-        public int $borrowingId,
+        public int $feedbackId,
         public string $title,
         public string $message,
         public string $url,
         public string $icon,
-    ) {}
+    ) {
+        //
+    }
 
     /**
      * Get the notification's delivery channels.
@@ -41,17 +42,11 @@ class BorrowingNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-
+            'feedback_id' => $this->feedbackId,
             'title' => $this->title,
-
             'message' => $this->message,
-
-            'icon' => $this->icon,
-
             'url' => $this->url,
-
-            'borrowing_id' => $this->borrowingId,
-
+            'icon' => $this->icon,
         ];
     }
 }

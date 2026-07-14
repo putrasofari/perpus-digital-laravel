@@ -1,4 +1,4 @@
-### Function controller
+### Load Eager & Filter function
 $category->load('books') => mengambil semua data buku dalam kategori (bisa membuat $category->books->count())
 $category->loadCount('books') => mengambil totoal data buku dalam kategori (laravel otomatis buat $category->books_count)
 
@@ -27,3 +27,7 @@ PATCH = mengubah satu data / data tunggal saja (contoh: saat klik suatu tombol m
 
 ### Function exists()
 digunakan hanya untuk menentukan kondisi true / false. Function exists() mengeluarkan nilai boolean (true / false)
+
+### Notifications (iluminate/support/facades)
+Notification::send() -> mengirim notif utk lebih dari 1 user
+notify() -> mengirim notif hanya utk 1 user

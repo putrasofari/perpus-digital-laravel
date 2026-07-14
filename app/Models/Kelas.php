@@ -15,4 +15,18 @@ class Kelas extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function getActiveUsersCountAttribute()
+    {
+        return $this->users()
+            ->where('is_active', true)
+            ->count();
+    }
+
+    public function getInactiveUsersCountAttribute()
+    {
+        return $this->users()
+            ->where('is_active', false)
+            ->count();
+    }
 }

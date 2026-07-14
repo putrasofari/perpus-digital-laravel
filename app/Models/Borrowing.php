@@ -23,7 +23,7 @@ class Borrowing extends Model
         'requested_at' => 'date',
         'approved_at' => 'date',
         'borrow_date' => 'date',
-        'due_date' => 'date',
+        'due_date' => 'datetime',
         'returned_at' => 'date',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -43,7 +43,7 @@ class Borrowing extends Model
     {
         return $this->status === 'dipinjam'
             && $this->due_date
-            && now()->gt($this->due_date);
+            && now()->greaterThan($this->due_date);
     }
 
     public function getLateDaysAttribute()

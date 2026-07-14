@@ -4,167 +4,149 @@
 @section('page-title', 'Riwayat Peminjaman Buku')
 
 @section('content')
+<div class="max-w-6xl mx-auto space-y-6 px-2 sm:px-0">
 
-    <div class="space-y-6">
-
-        {{-- Header --}}
-        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-
+    {{-- Bagian Header & Filter Pencarian --}}
+    <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 sm:p-6 shadow-sm">
+        <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <div>
-
-                <h2 class="text-2xl font-bold text-slate-800">
-                    Riwayat Peminjaman
+                <h2 class="text-xl sm:text-2xl font-bold text-slate-800 tracking-tight flex items-center gap-2">
+                    <span>📚</span> Riwayat Peminjaman
                 </h2>
-
-                <p class="text-slate-500 text-sm">
-                    Lihat seluruh riwayat peminjaman buku yang pernah kamu ajukan.
+                <p class="text-xs sm:text-sm text-slate-500 mt-1 leading-relaxed">
+                    Pantau alur sirkulasi, status validasi, dan tenggat waktu pengembalian buku Anda.
                 </p>
-
             </div>
 
-            {{-- Search --}}
-            <form method="GET">
-
-                <input type="text" name="search" value="{{ request('search') }}" placeholder="Cari judul buku..."
-                    class="w-72 rounded-lg border-slate-300 focus:ring-blue-500">
-
+            {{-- Formulir Pencarian dengan Ikon Unik --}}
+            <form method="GET" class="w-full lg:w-auto">
+                <div class="relative w-full lg:w-80">
+                    <input type="text" name="search" value="{{ request('search') }}" 
+                        placeholder="Cari judul buku atau penulis..."
+                        class="w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 pl-10 text-sm text-slate-800 placeholder:text-slate-400 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none transition-all">
+                    <div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-slate-400">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.603 10.601z" />
+                        </svg>
+                    </div>
+                </div>
             </form>
-
         </div>
+    </div>
 
-        {{-- Success --}}
-        @if (session('success'))
-            <div class="bg-green-100 border border-green-300 text-green-700 px-4 py-3 rounded-lg">
-                {{ session('success') }}
-            </div>
-        @endif
+    {{-- Notifikasi Sukses / Sistem Muted --}}
+    @if (session('success'))
+        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 px-4 py-3 rounded-xl text-sm flex items-center gap-2">
+            <span>✨</span> {{ session('success') }}
+        </div>
+    @endif
 
-        {{-- Table --}}
-        <div class="overflow-x-auto bg-white rounded-xl shadow">
-
-            <table class="min-w-full">
-
-                <thead class="bg-slate-100">
-
-                    <tr class="text-left text-slate-700">
-
-                        <th class="px-6 py-4">Buku</th>
-                        <th class="px-6 py-4">Jumlah</th>
+    {{-- Tabel Utama Data Riwayat --}}
+    <div class="overflow-hidden bg-white rounded-2xl border border-slate-200/80 shadow-xs">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-100">
+                <thead class="bg-slate-50">
+                    <tr class="text-left text-xs font-bold text-slate-450 uppercase tracking-wider">
+                        <th class="px-6 py-4">Informasi Buku</th>
+                        <th class="px-6 py-4 text-center">Jumlah</th>
                         <th class="px-6 py-4">Tanggal Pengajuan</th>
-                        <th class="px-6 py-4">Status</th>
+                        <th class="px-6 py-4">Status Transaksi</th>
                         <th class="px-6 py-4 text-center">Aksi</th>
-
                     </tr>
-
                 </thead>
 
-                <tbody>
-
+                <tbody class="divide-y divide-slate-100 bg-white">
                     @forelse ($borrowings as $borrowing)
-                        <tr class="border-t hover:bg-slate-50">
-
-                            <td class="px-6 py-4">
-
-                                <div class="font-semibold text-slate-800">
-
+                        <tr class="hover:bg-slate-50/60 transition-colors">
+                            {{-- Kolom Detail Buku --}}
+                            <td class="px-6 py-4 whitespace-nowrap sm:whitespace-normal max-w-xs">
+                                <div class="font-bold text-slate-800 text-sm">
                                     {{ $borrowing->book->judul }}
-
                                 </div>
-
-                                <div class="text-sm text-slate-500">
-
-                                    {{ $borrowing->book->penulis }}
-
+                                <div class="text-xs text-slate-450 font-medium mt-0.5 flex items-center gap-1">
+                                    <span>✍️</span> {{ $borrowing->book->penulis }}
                                 </div>
-
                             </td>
 
-                            <td class="px-6 py-4">
-
-                                {{ $borrowing->quantity }} Buku
-
+                            {{-- Kolom Jumlah --}}
+                            <td class="px-6 py-4 text-center whitespace-nowrap">
+                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-bold">
+                                    📖 {{ $borrowing->quantity }} Buku
+                                </span>
                             </td>
 
-                            <td class="px-6 py-4">
-
-                                {{ \Carbon\Carbon::parse($borrowing->requested_at)->translatedFormat('d F Y') }}
-
+                            {{-- Kolom Tanggal Pengajuan --}}
+                            <td class="px-6 py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-slate-600">
+                                {{ \Carbon\Carbon::parse($borrowing->requested_at)->translatedFormat('d M Y') }}
                             </td>
 
-                            <td class="px-6 py-4">
-
+                            {{-- Kolom Status Badge Muted --}}
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 @if ($borrowing->is_late)
-                                    <span class="px-3 py-1 rounded-full bg-red-100 text-red-700 text-sm">
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-50 text-red-700 border border-red-200/60 text-xs font-bold">
+                                        <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse"></span>
                                         Terlambat {{ $borrowing->late_days }} hari
                                     </span>
                                 @else
-                                    <span
-                                        class="px-3 py-1 rounded-full bg-{{ $borrowing->status_color }}-100 text-{{ $borrowing->status_color }}-700 text-sm">
-
+                                    @php
+                                        // Pemetaan warna dasar untuk status dinamis bawaan sistem Anda
+                                        $colorMap = [
+                                            'green' => ['bg' => 'bg-emerald-50', 'text' => 'text-emerald-700', 'border' => 'border-emerald-200/60', 'dot' => 'bg-emerald-500'],
+                                            'yellow' => ['bg' => 'bg-amber-50', 'text' => 'text-amber-700', 'border' => 'border-amber-200/60', 'dot' => 'bg-amber-500'],
+                                            'red' => ['bg' => 'bg-rose-50', 'text' => 'text-rose-700', 'border' => 'border-rose-200/60', 'dot' => 'bg-rose-500'],
+                                            'blue' => ['bg' => 'bg-blue-50', 'text' => 'text-blue-700', 'border' => 'border-blue-200/60', 'dot' => 'bg-blue-500'],
+                                        ];
+                                        $theme = $colorMap[$borrowing->status_color] ?? ['bg' => 'bg-slate-50', 'text' => 'text-slate-700', 'border' => 'border-slate-200/60', 'dot' => 'bg-slate-400'];
+                                    @endphp
+                                    <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full {{ $theme['bg'] }} {{ $theme['text'] }} {{ $theme['border'] }} border text-xs font-bold">
+                                        <span class="w-1.5 h-1.5 rounded-full {{ $theme['dot'] }}"></span>
                                         {{ $borrowing->status_label }}
-
                                     </span>
                                 @endif
-
                             </td>
 
-                            <td class="px-6 py-4 text-center">
-
+                            {{-- Kolom Tombol Aksi Kustom --}}
+                            <td class="px-6 py-4 text-center whitespace-nowrap">
                                 <a href="{{ route('user.borrowings.show', $borrowing) }}"
-                                    class="inline-flex items-center px-3 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-sm">
-
-                                    Detail
-
+                                    class="inline-flex items-center justify-center gap-1 px-3 py-1.5 rounded-xl border border-slate-300 bg-white hover:bg-slate-50 text-xs font-bold text-slate-600 shadow-xs transition-all group">
+                                    Lihat Detail
+                                    <svg class="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 transition-colors" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
+                                    </svg>
                                 </a>
-
                             </td>
-
                         </tr>
-
                     @empty
-
+                        {{-- Tampilan Kosong (Empty State) --}}
                         <tr>
-
-                            <td colspan="5" class="text-center py-12 text-slate-500">
-
-                                Belum ada riwayat peminjaman.
-
+                            <td colspan="5" class="text-center py-16 bg-slate-50/30">
+                                <div class="w-14 h-14 bg-slate-100 rounded-full flex items-center justify-center text-2xl mx-auto mb-3 shadow-inner">
+                                    📭
+                                </div>
+                                <h3 class="text-sm font-bold text-slate-700">Tidak Ada Riwayat</h3>
+                                <p class="text-xs text-slate-400 mt-1 max-w-xs mx-auto">
+                                    Data peminjaman buku yang Anda lakukan di masa lalu atau saat ini akan terdaftar di sini.
+                                </p>
                             </td>
-
                         </tr>
                     @endforelse
-
                 </tbody>
-
             </table>
-
         </div>
-
-        {{-- Pagination --}}
-        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3">
-
-            <p class="text-sm text-slate-500">
-
-                Menampilkan
-
-                <strong>{{ $borrowings->firstItem() ?? 0 }}</strong>
-
-                -
-
-                <strong>{{ $borrowings->lastItem() ?? 0 }}</strong>
-
-                dari
-
-                <strong>{{ $borrowings->total() }}</strong>
-
-                riwayat.
-
-            </p>
-
-            {{ $borrowings->links() }}
-
-        </div>
-
     </div>
 
+    {{-- Kontrol Halaman Halaman (Pagination Modern) --}}
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-2">
+        <p class="text-xs sm:text-sm text-slate-450 font-medium order-2 sm:order-1 text-center sm:text-left">
+            Menampilkan <span class="text-slate-700 font-bold">{{ $borrowings->firstItem() ?? 0 }}</span> 
+            sampai <span class="text-slate-700 font-bold">{{ $borrowings->lastItem() ?? 0 }}</span> 
+            dari total <span class="text-slate-700 font-bold">{{ $borrowings->total() }}</span> entri transaksi.
+        </p>
+
+        <div class="order-1 sm:order-2 flex justify-center">
+            {{ $borrowings->links() }}
+        </div>
+    </div>
+
+</div>
 @endsection

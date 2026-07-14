@@ -55,18 +55,6 @@ class KelasController extends Controller
      */
     public function show(Kelas $kelas)
     {
-        $kelas->loadCount([
-            'users',
-
-            'users as active_users_count' => function ($query) {
-                $query->where('is_active', true);
-            },
-
-            'users as inactive_users_count' => function ($query) {
-                $query->where('is_active', false);
-            },
-        ]);
-
         $users = $kelas->users()
             ->where('is_active', true)
             ->orderBy('name')

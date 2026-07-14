@@ -59,4 +59,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(Borrowing::class);
     }
+
+    public function feedbacks()
+    {
+        return $this->hasMany(FeedBack::class);
+    }
 }
